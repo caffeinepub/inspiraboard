@@ -1,0 +1,326 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "InspiraBoard frontend (auth, posts, discovery, messaging, calling, theme, static assets)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Internet Identity sign-in, profile setup/edit UI (display name, avatar, bio), and profile screen showing user content.",
+      "acceptanceCriteria": [
+        "Users can sign in/out using Internet Identity.",
+        "On first sign-in, a user profile is created with editable fields (at least display name + bio).",
+        "Profile data persists across reloads and is tied to the authenticated principal.",
+        "A profile page/screen displays the user’s profile and their posted content."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the top-level app shell with authenticated gating (show login when not authenticated; hide application data until authenticated), and register routes for feed, post create, post detail, profile, messaging, and calling. Use the selected component \"authorization\" (frontend guidance) to ensure login/logout clears cached React Query data. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Add a reusable Internet Identity login/logout button that uses the existing useInternetIdentity hook and clears React Query cache on logout, following the selected component \"authorization\" usage guidance. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Add a React Query hook to fetch the caller’s user profile and expose loading/fetched state to prevent first-login modal flash, aligning with the selected component \"authorization\" recommended pattern. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileSetupDialog.tsx",
+          "operation": "create",
+          "description": "Create a first-login profile setup dialog that prompts for display name and bio (and optional avatar), saves via the backend actor, and only shows after the profile query is fetched and returns null. Use the selected component \"authorization\" profile-setup guidance. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileEditor.tsx",
+          "operation": "create",
+          "description": "Create an editable profile form for updating display name, bio, and avatar. For avatar upload, use the selected component \"blob-storage\" via ExternalBlob (create from bytes and display via direct URL). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "create",
+          "description": "Create the profile page that shows user profile fields and lists the user’s posts; allow editing own profile while viewing other users’ profiles as read-only."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Pinterest-like posts: create image+caption posts (optional tags), browse feed, view post details, and show posts on profiles.",
+      "acceptanceCriteria": [
+        "Signed-in users can create a post with: image + caption (minimum); optional tags.",
+        "Users can browse a home feed of posts.",
+        "Clicking a post opens a detail view with full image and metadata (author, caption, created time).",
+        "Users can view a profile page that lists that user’s posts.",
+        "Posts persist across reloads and are retrievable from the canister."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useFeed.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for loading the home feed and invalidating it after post creation."
+        },
+        {
+          "path": "frontend/src/components/posts/PostCard.tsx",
+          "operation": "create",
+          "description": "Create a reusable post card component for the grid/feed; render post image via ExternalBlob direct URL (selected component \"blob-storage\") and show caption/author/created time summary. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "create",
+          "description": "Create the home feed page that uses the feed hook, renders a responsive grid of PostCard components, and supports navigation to post details and author profiles."
+        },
+        {
+          "path": "frontend/src/components/posts/PostComposer.tsx",
+          "operation": "create",
+          "description": "Create the post creation form with image upload, caption, and optional tags input. Use the selected component \"blob-storage\" ExternalBlob.fromBytes for the image (optionally with upload progress). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CreatePostPage.tsx",
+          "operation": "create",
+          "description": "Create the post creation screen that uses PostComposer and on success navigates back to the feed and refreshes cached feed/search data."
+        },
+        {
+          "path": "frontend/src/pages/PostDetailPage.tsx",
+          "operation": "create",
+          "description": "Create a post detail view showing full image, author, caption, created time, and tags; include UI affordance to start messaging/calling the author (wiring to messaging/call flows)."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Wire profile page to also fetch and render the selected user’s post list (for self and others) and link posts to PostDetailPage."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Discovery: search posts by caption/tags and browse/filter by tag using backend queries.",
+      "acceptanceCriteria": [
+        "A search UI allows entering text and shows matching posts.",
+        "Selecting a tag filters/browses posts for that tag.",
+        "Search and tag browsing query the backend (not only client-side filtering)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useSearchPosts.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for searching posts by term and optional tag, and a hook to load available tags for browsing."
+        },
+        {
+          "path": "frontend/src/components/discovery/SearchBar.tsx",
+          "operation": "create",
+          "description": "Create a search input component (term + optional tag selection) that drives backend-powered search results (no client-only filtering)."
+        },
+        {
+          "path": "frontend/src/components/discovery/TagChips.tsx",
+          "operation": "create",
+          "description": "Create a tag browsing/filter UI that lists tags and allows selecting a tag to filter results via backend search."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "modify",
+          "description": "Integrate SearchBar and TagChips into the feed page to switch between feed mode and backend-driven search/tag-browse mode while keeping navigation to post detail intact."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "1:1 messaging UI with conversation list, message history, send, and polling-based refresh (no WebSockets).",
+      "acceptanceCriteria": [
+        "Users can start or open a direct conversation with another user (by selecting from a user list or from a post author).",
+        "Users can send text messages and see them appear in the conversation history.",
+        "A conversation list shows recent conversations and latest message preview.",
+        "Messages persist in the backend and load correctly after refresh/relogin.",
+        "The UI periodically refreshes message history via polling (no WebSockets)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/usePolling.ts",
+          "operation": "create",
+          "description": "Create a small polling utility hook to periodically refetch queries or call refresh callbacks on an interval, with proper cleanup when screens unmount."
+        },
+        {
+          "path": "frontend/src/hooks/useDirectMessages.ts",
+          "operation": "create",
+          "description": "Add React Query hooks to load message history with another user, send messages, and integrate polling-based refresh (no WebSockets)."
+        },
+        {
+          "path": "frontend/src/components/messages/ConversationList.tsx",
+          "operation": "create",
+          "description": "Create a conversation list UI that shows recent conversations and latest message preview (derived from available message history and/or cached queries) and supports selecting a conversation."
+        },
+        {
+          "path": "frontend/src/components/messages/MessageThread.tsx",
+          "operation": "create",
+          "description": "Create the message thread UI to render history, send new text messages, and keep view refreshed via polling."
+        },
+        {
+          "path": "frontend/src/pages/MessagesPage.tsx",
+          "operation": "create",
+          "description": "Create a messaging screen that combines ConversationList and MessageThread and supports starting a conversation from a post author or profile context."
+        },
+        {
+          "path": "frontend/src/pages/PostDetailPage.tsx",
+          "operation": "modify",
+          "description": "Wire a 'Message author' action from post detail to open the correct direct conversation in MessagesPage."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Wire a 'Message' action from profile to open/start a direct conversation in MessagesPage."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "1:1 voice/video calling UI and WebRTC peer connection with canister-mediated signaling using non-WebSocket polling; include incoming call prompt and in-call controls.",
+      "acceptanceCriteria": [
+        "Users can initiate a voice call or video call to another user from a profile, chat, or post-author context.",
+        "The receiving user sees an incoming call prompt and can accept/decline.",
+        "When accepted, both users see an in-call UI with at least: mute/unmute, camera on/off (for video), and hang up.",
+        "If a call is declined, missed, or ended, both sides return to a stable UI state and can attempt again.",
+        "Signaling data required to establish calls is exchanged via the canister using non-WebSocket requests (e.g., polling)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useWebRTCCall.ts",
+          "operation": "create",
+          "description": "Implement a WebRTC call controller hook that manages peer connection lifecycle, local/remote media tracks, and exposes actions for mute/unmute, camera on/off (video), accept/decline, and hangup."
+        },
+        {
+          "path": "frontend/src/hooks/useCallSignaling.ts",
+          "operation": "create",
+          "description": "Create a signaling adapter layer that exchanges SDP/ICE and call state via non-WebSocket requests with polling. This should be designed to integrate with the canister-mediated signaling backend capability (implemented separately) and should poll for incoming signaling updates."
+        },
+        {
+          "path": "frontend/src/components/calling/IncomingCallPrompt.tsx",
+          "operation": "create",
+          "description": "Create an incoming call prompt UI (accept/decline) that can be displayed globally when polling detects an incoming call."
+        },
+        {
+          "path": "frontend/src/pages/CallPage.tsx",
+          "operation": "create",
+          "description": "Create the in-call screen for voice/video with local/remote media rendering and controls: mute/unmute, camera on/off for video, and hang up. Use the selected component \"camera\" (useCamera hook) to provide reliable camera preview/handling for video calls where appropriate. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Add 'Voice call' and 'Video call' actions that navigate into CallPage and initiate calls to the selected user."
+        },
+        {
+          "path": "frontend/src/pages/MessagesPage.tsx",
+          "operation": "modify",
+          "description": "Add 'Voice call' and 'Video call' actions within the direct conversation UI to initiate calls from the chat context."
+        },
+        {
+          "path": "frontend/src/pages/PostDetailPage.tsx",
+          "operation": "modify",
+          "description": "Add 'Call author' actions (voice/video) on post detail to initiate a call with the post author."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire global incoming call polling and render IncomingCallPrompt on top of the app shell; ensure stable UI state transitions on accept/decline/end and route registration for CallPage."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Create and apply a cohesive warm visual theme (no blue/purple primary) across all screens with Tailwind/Shadcn styling.",
+      "acceptanceCriteria": [
+        "The UI has a consistent theme (color palette, type scale, spacing, component styling) across all screens.",
+        "Primary colors are not blue/purple by default.",
+        "Key flows (browse, create post, view post, message, call) are visually cohesive and usable on mobile and desktop."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create or update the global Tailwind/Shadcn CSS variable theme to a warm palette (e.g., sand/terracotta/charcoal) with consistent typography and spacing defaults; ensure the primary color is not blue/purple."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extensions as needed to support the warm palette and consistent radius/shadows/typography across components while keeping Shadcn variable-based colors intact."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "create",
+          "description": "Create a shared layout (header + main container) used by feed, post creation, post detail, profile, messaging, and calling screens; ensure consistent spacing and responsive behavior."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "modify",
+          "description": "Apply the shared layout and cohesive styling to the feed grid, empty states, and discovery controls."
+        },
+        {
+          "path": "frontend/src/pages/CreatePostPage.tsx",
+          "operation": "modify",
+          "description": "Apply the shared layout and cohesive styling to the post composer, inputs, and submit actions."
+        },
+        {
+          "path": "frontend/src/pages/PostDetailPage.tsx",
+          "operation": "modify",
+          "description": "Apply the shared layout and cohesive styling to the post detail view and author actions."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Apply the shared layout and cohesive styling to profile display/editor and post list."
+        },
+        {
+          "path": "frontend/src/pages/MessagesPage.tsx",
+          "operation": "modify",
+          "description": "Apply the shared layout and cohesive styling to conversation list and message thread across mobile/desktop breakpoints."
+        },
+        {
+          "path": "frontend/src/pages/CallPage.tsx",
+          "operation": "modify",
+          "description": "Apply the shared layout and cohesive styling to the call UI, ensuring controls are touch-friendly and responsive."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Add generated logo and empty-state illustrations as static assets and render them in header/login and empty screens.",
+      "acceptanceCriteria": [
+        "The generated logo is used in the app header/login area.",
+        "Empty-state illustrations appear for at least: empty feed, empty messages.",
+        "All generated images are loaded as static assets from frontend/public/assets/generated."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/logo-mark.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static logo asset at frontend/public/assets/generated/logo-mark.dim_512x512.png and ensure it is referenced by the header/login UI as a static public asset (not served through the backend)."
+        },
+        {
+          "path": "frontend/public/assets/generated/empty-feed.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add the generated empty feed illustration at frontend/public/assets/generated/empty-feed.dim_1200x800.png for use when the feed is empty."
+        },
+        {
+          "path": "frontend/public/assets/generated/empty-messages.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add the generated empty messages illustration at frontend/public/assets/generated/empty-messages.dim_1200x800.png for use when there are no conversations/messages."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Render the generated logo from frontend/public/assets/generated/logo-mark.dim_512x512.png in the app header/login area."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "modify",
+          "description": "Render the empty-state illustration from frontend/public/assets/generated/empty-feed.dim_1200x800.png when the feed has no posts."
+        },
+        {
+          "path": "frontend/src/pages/MessagesPage.tsx",
+          "operation": "modify",
+          "description": "Render the empty-state illustration from frontend/public/assets/generated/empty-messages.dim_1200x800.png when there are no conversations or the selected conversation has no messages."
+        }
+      ]
+    }
+  ]
+}

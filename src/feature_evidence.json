@@ -1,0 +1,184 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-internet-identity-sign-in-and-a-basic-user-profile-model-display-name-avatar-bio-that-is-persisted-in-the-motoko-canister-and-shown-in-the-ui",
+      "featureTitle": "Implement Internet Identity sign-in and a basic user profile model (display name, avatar, bio) that is persisted in the Motoko canister and shown in the UI.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/profile/ProfileEditor.tsx",
+        "frontend/src/components/profile/ProfileSetupDialog.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-core-content-features-for-a-pinterest-like-inspiration-feed-create-posts-with-an-image-and-caption-browse-a-home-feed-view-a-post-detail-page-and-list-a-user-s-posts-on-their-profile",
+      "featureTitle": "Add core content features for a Pinterest-like inspiration feed: create posts with an image and caption, browse a home feed, view a post detail page, and list a user’s posts on their profile.",
+      "files": [
+        "frontend/src/components/posts/PostCard.tsx",
+        "frontend/src/components/posts/PostComposer.tsx",
+        "frontend/src/pages/CreatePostPage.tsx",
+        "frontend/src/pages/FeedPage.tsx",
+        "frontend/src/pages/PostDetailPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-lightweight-discovery-tools-search-posts-by-caption-tags-and-allow-browsing-by-tag",
+      "featureTitle": "Add lightweight discovery tools: search posts by caption/tags and allow browsing by tag.",
+      "files": [
+        "frontend/src/components/discovery/SearchBar.tsx",
+        "frontend/src/components/discovery/TagChips.tsx",
+        "frontend/src/pages/FeedPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-1-1-in-app-messaging-between-users-with-conversation-list-message-history-and-sending-new-messages-use-a-polling-based-refresh-strategy-no-websockets",
+      "featureTitle": "Implement 1:1 in-app messaging between users with conversation list, message history, and sending new messages; use a polling-based refresh strategy (no WebSockets).",
+      "files": [
+        "frontend/src/components/messages/ConversationList.tsx",
+        "frontend/src/components/messages/MessageThread.tsx",
+        "frontend/src/hooks/usePolling.ts",
+        "frontend/src/pages/MessagesPage.tsx",
+        "frontend/src/pages/PostDetailPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-provide-1-1-calling-flows-for-voice-and-video-chat-using-browser-based-peer-to-peer-media-webrtc-with-canister-mediated-signaling-suitable-for-a-non-websocket-environment-e-g-polling-include-an-incoming-call-prompt-in-call-controls-and-call-termination",
+      "featureTitle": "Provide 1:1 calling flows for voice and video chat using browser-based peer-to-peer media (WebRTC) with canister-mediated signaling suitable for a non-WebSocket environment (e.g., polling). Include an incoming call prompt, in-call controls, and call termination.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/calling/IncomingCallPrompt.tsx",
+        "frontend/src/hooks/useCallSignaling.ts",
+        "frontend/src/hooks/useWebRTCCall.ts",
+        "frontend/src/pages/CallPage.tsx",
+        "frontend/src/pages/MessagesPage.tsx",
+        "frontend/src/pages/PostDetailPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-a-coherent-distinctive-visual-theme-for-the-app-colors-typography-layout-and-component-styling-and-apply-it-consistently-across-feed-post-creation-post-detail-profile-messaging-and-calling-screens-avoid-blue-purple-as-primary-colors-unless-required",
+      "featureTitle": "Create a coherent, distinctive visual theme for the app (colors, typography, layout, and component styling) and apply it consistently across feed, post creation, post detail, profile, messaging, and calling screens (avoid blue/purple as primary colors unless required).",
+      "files": [
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/CallPage.tsx",
+        "frontend/src/pages/CreatePostPage.tsx",
+        "frontend/src/pages/FeedPage.tsx",
+        "frontend/src/pages/MessagesPage.tsx",
+        "frontend/src/pages/PostDetailPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-generated-static-image-assets-logo-app-mark-and-a-small-set-of-empty-state-illustrations-and-render-them-in-the-ui-from-frontend-public-assets-generated-do-not-serve-generated-images-through-the-backend",
+      "featureTitle": "Add generated static image assets (logo/app mark and a small set of empty-state illustrations) and render them in the UI from frontend/public/assets/generated (do not serve generated images through the backend).",
+      "files": [
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/pages/FeedPage.tsx",
+        "frontend/src/pages/MessagesPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

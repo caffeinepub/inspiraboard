@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build an inspiration-sharing app (Pinterest-like) with posting plus real-time communication features: messaging, voice calls, and video chat.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Minimal modern logo mark: abstract pin + spark motif, flat vector style (logo-mark.dim_512x512.png)\n- Empty state illustration: cozy desk with moodboard/collage elements, warm palette, flat vector style (empty-feed.dim_1200x800.png)\n- Empty state illustration: two chat bubbles with small collage scraps, warm palette, flat vector style (empty-messages.dim_1200x800.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-internet-identity-sign-in-and-a-basic-user-profile-model-display-name-avatar-bio-that-is-persisted-in-the-motoko-canister-and-shown-in-the-ui",
+      "title": "Implement Internet Identity sign-in and a basic user profile model (display name, avatar, bio) that is persisted in the Motoko canister and shown in the UI.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-core-content-features-for-a-pinterest-like-inspiration-feed-create-posts-with-an-image-and-caption-browse-a-home-feed-view-a-post-detail-page-and-list-a-user-s-posts-on-their-profile",
+      "title": "Add core content features for a Pinterest-like inspiration feed: create posts with an image and caption, browse a home feed, view a post detail page, and list a user’s posts on their profile.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-lightweight-discovery-tools-search-posts-by-caption-tags-and-allow-browsing-by-tag",
+      "title": "Add lightweight discovery tools: search posts by caption/tags and allow browsing by tag.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-1-1-in-app-messaging-between-users-with-conversation-list-message-history-and-sending-new-messages-use-a-polling-based-refresh-strategy-no-websockets",
+      "title": "Implement 1:1 in-app messaging between users with conversation list, message history, and sending new messages; use a polling-based refresh strategy (no WebSockets).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-1-1-calling-flows-for-voice-and-video-chat-using-browser-based-peer-to-peer-media-webrtc-with-canister-mediated-signaling-suitable-for-a-non-websocket-environment-e-g-polling-include-an-incoming-call-prompt-in-call-controls-and-call-termination",
+      "title": "Provide 1:1 calling flows for voice and video chat using browser-based peer-to-peer media (WebRTC) with canister-mediated signaling suitable for a non-WebSocket environment (e.g., polling). Include an incoming call prompt, in-call controls, and call termination.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-coherent-distinctive-visual-theme-for-the-app-colors-typography-layout-and-component-styling-and-apply-it-consistently-across-feed-post-creation-post-detail-profile-messaging-and-calling-screens-avoid-blue-purple-as-primary-colors-unless-required",
+      "title": "Create a coherent, distinctive visual theme for the app (colors, typography, layout, and component styling) and apply it consistently across feed, post creation, post detail, profile, messaging, and calling screens (avoid blue/purple as primary colors unless required).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-static-image-assets-logo-app-mark-and-a-small-set-of-empty-state-illustrations-and-render-them-in-the-ui-from-frontend-public-assets-generated-do-not-serve-generated-images-through-the-backend",
+      "title": "Add generated static image assets (logo/app mark and a small set of empty-state illustrations) and render them in the UI from frontend/public/assets/generated (do not serve generated images through the backend).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Pinterest-like inspiration discovery experience (browse/search inspiration content)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "User posting feature for inspiration content",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "In-app messaging between users",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Real-time calling features: voice calls and video chat between users",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "InspiraBoard",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,0 +1,172 @@
+{
+  "kind": "build_request",
+  "title": "Inspiration-sharing app with posts, discovery, messaging, and 1:1 calling (voice/video)",
+  "projectName": "InspiraBoard",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement Internet Identity sign-in and a basic user profile model (display name, avatar, bio) that is persisted in the Motoko canister and shown in the UI.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create an app for getting inspirations like pinterest but you can post,call people and even video chat and message"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can sign in/out using Internet Identity.",
+        "On first sign-in, a user profile is created with editable fields (at least display name + bio).",
+        "Profile data persists across reloads and is tied to the authenticated principal.",
+        "A profile page/screen displays the user’s profile and their posted content."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add core content features for a Pinterest-like inspiration feed: create posts with an image and caption, browse a home feed, view a post detail page, and list a user’s posts on their profile.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create an app for getting inspirations like pinterest but you can post..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Signed-in users can create a post with: image + caption (minimum); optional tags.",
+        "Users can browse a home feed of posts.",
+        "Clicking a post opens a detail view with full image and metadata (author, caption, created time).",
+        "Users can view a profile page that lists that user’s posts.",
+        "Posts persist across reloads and are retrievable from the canister."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add lightweight discovery tools: search posts by caption/tags and allow browsing by tag.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create an app for getting inspirations like pinterest..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "A search UI allows entering text and shows matching posts.",
+        "Selecting a tag filters/browses posts for that tag.",
+        "Search and tag browsing query the backend (not only client-side filtering)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement 1:1 in-app messaging between users with conversation list, message history, and sending new messages; use a polling-based refresh strategy (no WebSockets).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "...and message"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can start or open a direct conversation with another user (by selecting from a user list or from a post author).",
+        "Users can send text messages and see them appear in the conversation history.",
+        "A conversation list shows recent conversations and latest message preview.",
+        "Messages persist in the backend and load correctly after refresh/relogin.",
+        "The UI periodically refreshes message history via polling (no WebSockets)."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Provide 1:1 calling flows for voice and video chat using browser-based peer-to-peer media (WebRTC) with canister-mediated signaling suitable for a non-WebSocket environment (e.g., polling). Include an incoming call prompt, in-call controls, and call termination.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "...call people and even video chat..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can initiate a voice call or video call to another user from a profile, chat, or post-author context.",
+        "The receiving user sees an incoming call prompt and can accept/decline.",
+        "When accepted, both users see an in-call UI with at least: mute/unmute, camera on/off (for video), and hang up.",
+        "If a call is declined, missed, or ended, both sides return to a stable UI state and can attempt again.",
+        "Signaling data required to establish calls is exchanged via the canister using non-WebSocket requests (e.g., polling)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Create a coherent, distinctive visual theme for the app (colors, typography, layout, and component styling) and apply it consistently across feed, post creation, post detail, profile, messaging, and calling screens (avoid blue/purple as primary colors unless required).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create an app for getting inspirations like pinterest..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The UI has a consistent theme (color palette, type scale, spacing, component styling) across all screens.",
+        "Primary colors are not blue/purple by default.",
+        "Key flows (browse, create post, view post, message, call) are visually cohesive and usable on mobile and desktop."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add generated static image assets (logo/app mark and a small set of empty-state illustrations) and render them in the UI from frontend/public/assets/generated (do not serve generated images through the backend).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create an app for getting inspirations like pinterest..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The generated logo is used in the app header/login area.",
+        "Empty-state illustrations appear for at least: empty feed, empty messages.",
+        "All generated images are loaded as static assets from frontend/public/assets/generated."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (all core logic in backend/main.mo).",
+    "Do not introduce external databases or cloud services; persist data in-canister.",
+    "Frontend must use React + TypeScript with Tailwind/Shadcn and React Query for data fetching/caching.",
+    "Do not edit files under frontend/src/components/ui or other immutablePaths; compose them instead.",
+    "Do not use WebSockets/Socket.io for messaging or call signaling; use non-WebSocket patterns such as polling."
+  ],
+  "nonGoals": [
+    "Group chats or community chat rooms.",
+    "Public social media integrations or third-party auth providers (other than Internet Identity).",
+    "Push notifications, SMS, or email notifications.",
+    "Advanced recommendation algorithms (e.g., ML-based ranking) beyond basic feed ordering/search."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Minimal modern logo mark: abstract pin + spark motif, flat vector style (logo-mark.dim_512x512.png)",
+      "Empty state illustration: cozy desk with moodboard/collage elements, warm palette, flat vector style (empty-feed.dim_1200x800.png)",
+      "Empty state illustration: two chat bubbles with small collage scraps, warm palette, flat vector style (empty-messages.dim_1200x800.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

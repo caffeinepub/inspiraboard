@@ -1,0 +1,90 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-16T17:20:38.407Z",
+  "summary": "The diff adds a Motoko backend with profiles, posts, tags, and (partial) messaging types/storage, plus a React+TS frontend with Internet Identity login, feed/post components, discovery UI, messaging thread polling, and basic call UI scaffolding. However, key parts of calling signaling (backend + real polling) and some required UI/assets evidence (empty feed illustration, conversation list data fetching) are missing or only stubbed.",
+  "missing_requirements": [
+    {
+      "id": "REQ-4",
+      "requirement": "Conversation list that shows recent conversations and latest message preview, backed by persisted backend data and refreshed via polling.",
+      "reason": "UI component `ConversationList` exists but there is no evidence of a backend method/hook to fetch a conversation list (e.g., getConversations) or any React Query hook for it; only per-user message history fetching (`useGetMessages`) is shown. Without a conversation-list query, the AC for recent conversations + preview is not demonstrated.",
+      "evidence": [
+        "frontend/src/components/messages/ConversationList.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "1:1 voice/video calling using WebRTC with canister-mediated signaling via non-WebSocket patterns (e.g., polling), including incoming prompt, accept/decline, in-call controls, and stable termination state.",
+      "reason": "Frontend call signaling polling is explicitly a placeholder and does not poll the backend; WebRTC hook also notes it is not doing real peer connection/signaling exchange. There is no evidence in the backend diff of call signaling endpoints/storage to exchange SDP/ICE via polling.",
+      "evidence": [
+        "frontend/src/hooks/useCallSignaling.ts",
+        "frontend/src/hooks/useWebRTCCall.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Empty-state illustration appears for at least: empty feed.",
+      "reason": "The diff shows an empty-state illustration for messages (`empty-messages...`) and the logo usage, but there is no evidence of rendering `empty-feed.dim_1200x800.png` anywhere in the shown frontend files.",
+      "evidence": [
+        "frontend/src/components/messages/ConversationList.tsx",
+        "frontend/src/components/layout/AppShell.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Access-control secret initialization via URL parameter `caffeineAdminToken` and calling `_initializeAccessControlWithSecret` on the backend actor.",
+      "reason": "BuildRequest does not ask for admin-token/secret-based access control bootstrapping; only Internet Identity sign-in is required.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Caffeine.ai attribution/footer link with UTM parameters.",
+      "reason": "Not requested in the BuildRequest requirements or acceptance criteria.",
+      "evidence": [
+        "frontend/src/components/layout/AppShell.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/calling/IncomingCallPrompt.tsx",
+    "frontend/src/components/discovery/SearchBar.tsx",
+    "frontend/src/components/discovery/TagChips.tsx",
+    "frontend/src/components/layout/AppShell.tsx",
+    "frontend/src/components/messages/ConversationList.tsx",
+    "frontend/src/components/messages/MessageThread.tsx",
+    "frontend/src/components/posts/PostCard.tsx",
+    "frontend/src/components/posts/PostComposer.tsx",
+    "frontend/src/components/profile/ProfileEditor.tsx",
+    "frontend/src/components/profile/ProfileSetupDialog.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useCallSignaling.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/usePolling.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/hooks/useWebRTCCall.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/CallPage.tsx",
+    "frontend/src/pages/CreatePostPage.tsx",
+    "frontend/src/pages/FeedPage.tsx",
+    "frontend/src/pages/MessagesPage.tsx",
+    "frontend/src/pages/PostDetailPage.tsx",
+    "frontend/src/pages/ProfilePage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
